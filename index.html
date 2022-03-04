@@ -22,6 +22,11 @@
     td {
       padding:2px 15px;
     }
+
+    sup {
+      color: red;
+      font-style: italic;
+    }
     </style>
 
     <script async class="remove" src="https://www.w3.org/Tools/respec/respec-w3c"></script>
@@ -68,7 +73,7 @@
 <body>
     <section id='abstract'>
         <p>
-        This document introduces the use cases and requriments of client, edge, cloud coordination mechanism and its standardization. 
+        This document introduces the use cases and requirements of client, edge, cloud coordination mechanism and its standardization.
         </p>
     </section>
     <section id='sotd'>
@@ -92,8 +97,8 @@
 
         <p>
           To improve the client side application's performance, there is a trend to offload computing intensive work to the edge cloud, such as cloud app, cloud gaming etc.
-          However, current approch could be further optimized if there is a mechanism for Client-Edge-Cloud coordination.
-          This document discusses the use cases and requriments of Client-Edge-Cloud coordination mechanism and its standardization.
+          However, current approach could be further optimized if there is a mechanism for Client-Edge-Cloud coordination.
+          This document discusses the use cases and requirements of Client-Edge-Cloud coordination mechanism and its standardization.
         </p>
 
         <p>
@@ -119,7 +124,7 @@
           </p>
         <li>Hybrid application</li>
           <p>
-            Hybrid application refers to the application whose main task includes both rendering intesive work and computing intensive work. For example, morden e-commerce mobile application 
+            Hybrid application refers to the application whose main task includes both rendering intensive work and computing intensive work. For example, morden e-commerce mobile application
             leverage machine learning inference in the client side for AR tpye user experience. At the same time, the e-commerce mobile application needs to fetch dynamic content based
             on uesr preference.
           </p>
@@ -172,9 +177,17 @@
         <section>
           <h3>VR/AR</h3>
           <p>
-            VR/AR devices such as VR/AR glasses normally has limitted hardware resources, so it is preferred to offload the computing intensive task to the edge for acceleration and
+            VR/AR devices such as VR/AR glasses normally has limited hardware resources, so it is preferred to offload the computing intensive task to the edge for acceleration and
             reducing delay since the edge server is deployed near the location of the user.
           </p>
+	  <p>
+	  Note: this could be generalized to "low-latency tasks".  Some other examples might include
+	  game physics simulation or CAD tools (in a business environment).  The latter might add confidentiality
+	  constraints (a business user may want to offload to on-premises computers).
+	  We may also want to clarify that this pattern is for local communication to/from the client.
+	  See also "Streaming Acceleration", where the communication is in-line with an existing network
+	  connection.
+	  </p>
         </section>
 
 
@@ -199,13 +212,188 @@
             it is preferred that the functionalities could be handed over back to the client. More complex rules could be designed to improve the robustness of the application.
           </p>
         </section>
+
+        <section>
+          <h3>Persistent tasks <sup>NEW</sup></h3>
+          <p>
+	  In some cases it may be desireable to a task from a browser that continues to run even when the
+	  browser application is not active.  This could be used to monitor a condition for example and send
+	  a notification when that condition is met.  As a sub-category of this use case, the offloaded task
+	  might be used to monitor IoT devices and instead of or in addition to sending a notification, it
+	  might be used for automation.
+	  Such an offloaded task might also be used to execute long-running computational
+	  tasks such as machine learning or data indexing.
+          </p>
+	  <p>
+	  Persistent tasks require a mechanism to manage their lifetime using expiry dates or explicit controls.
+	  In the case of applying this to IoT orchestration, there is also the issue of granting access rights
+	  to such offloaded tasks, for example access to a LAN, to specific IoT devices on that LAN, and to the
+	  data they generate.
+	  </p>
+        </section>
+
+        <section>
+          <h3>Streaming Acceleration <sup>NEW</sup></h3>
+
+          <p>In the case of video acceleration, we may want to offload work to a location with both
+	  compute performance that is already on the network path.  Specifically, consider a low-performance
+	  client that wants to compress video or do background removal as part of a teleconference.
+	  It could connect over a local high-performance wireless network to a local edge computer (perhaps
+	  an enhanced ISP gateway box) that would then perform the video processing and forward the processed
+	  video to the network.
+	  </p>
+	  <p>
+	  We may also want to clarify that this pattern is for communication  in-line with an existing
+	  network.
+	  See also "VR/AR" (should be generalized), where the communication is to/from the offload target.
+	</section>
+
+	<section>
+	  <h3>Robot Navigation Acceleration <sup>NEW</sup></h3>
+	  <p>
+	  Consider a robot navigating in a home using Visual SLAM.  In this case the robot has limited
+	  performance due to cost and power constraints.  So it wishes to offload the video processing work
+	  to another computer.  However, the video is sensitive private data so the user would prefer that
+	  it does not leave the user's premises, and would like to offload the processing to an existing
+	  desktop computer or an enhanced gateway.  Latency may also be a concern (the robot needs the
+	  results immediately to make navigation decisions, for example to avoid a wire or other obstacle
+	  on the floor).
+	  </p>
+	  <p>
+	  Note: in general, there are other opportunities for IoT devices to want to offload work to another
+	  computer.  Video processing however is of special interest because of its high data and processing
+	  requirements and privacy constraints.
+	  </p>
+	</section>
+
+
+
+  <section>
+    <h3>Online Video Conference <sup>NEW</sup></h3>
+    <p>
+      For online video conference application, the online video conference system provides realtime translation and subtitles service. This will use AI technology and it is
+      computing intensive. Also, the real time translation service is very delay sensitive.
+    </p>
+    <p>
+      The online video conference application could be installed on PC terminals or mobile terminals.
+      For PC terminals, there is enough computing resources and enough disk storage to allow the installation of online video conference application. In this case, the computing
+      intensive work could be done in the PC terminal and providing ultra-low latency user experience.
+    </p>
+
+    <p>
+      For mobile terminals, there is limited disk storage and limited computing capability, it is not possbile to run the computing intensive task on the mobile terminals. In this case,
+      the computing intensive task could be offloaded to the edge and then providing ultra-low latency user experience.
+    </p>
+
+    <p>
+      It is preferred that in this use case the online video conference application can offload the computing intensive task according to the terminal capability and edge resources availability.
+      The online video conference service provider can provide consistent user experience on different terminals.
+    </p>
+  </section>
+
+  <section>
+    <h3>Image Processing <sup>NEW</sup></h3>
+    <p>
+      For some mobile image processing applications, it is required to use AI algorithm for the image analysis and processing. It is normally need NPU chipset on the terminals for better performance.
+      For the terminals that without NPU chipset, it is preferred to offload the AI computing intensive task to the edge and this will provide a consistent user experience on different terminals.
+    </p>
+  </section>
+
+  <section>
+    <h3>Automatic License Plate Recognition <sup>NEW</sup></h3>
+    <p>
+      For automatic license plate recognition applications, offline processing can provide 90% recognition rate. Online processing on the edge will improve the recognition rate to 99%.
+      It is preferred to offload the license plate recognition computing intensive task to edge when the network connection is stable and if the network condition is not stable or broken, the offloaded computing
+      intensive task could move back to the terminals to guarantee the availability of the service.
+    </p>
+  </section>
+
+
+  <section>
+    <h3>Professional Web-based media production <sup>NEW</sup></h3>
+    <p>
+      Processing and rendering media is a complex task. For example, a video editing application needs to do image processing, video editing, audio editing, etc. So it has high performance requirements.
+    </p>
+
+    <p>
+      Professional Web-based media production relies on web-based media editing tools heavily which can be used to do AI Cutting, AI Editing, AI Transcoding and publish videos to the cloud. Since the edge cloud has more powerful computing power and close to user's location,  by offloading the expensive rendering process to the edge, the web apps can render media more quickly and provide better user experience.
+    </p>
+
+    <figure>
+      <img alt="CloudApp" src="images/web_based_media.png" width="600">
+      <figcaption>
+        Web-based media production
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h3>Cloud Gaming <sup>NEW</sup></h3>
+    <p>
+      Cloud gaming is a game mode based on cloud computing. Under the operation mode of cloud game, all games are running on the cloud side, and the game images are compressed and transmitted to users by video stream through the network after rendering. The cloud gaming user can receive the game video stream and send control commands to the cloud to control the game.
+    </p>
+
+    <p>Taking Click-and-Play scenario for example, since all the rendering and control commands are offloaded to the edge, the cloud game user don't need to install the game locally, just click the game and then play with it smoothly. </p>
+
+    <p>
+    By offloading native games to the edge and making full use of the computing power and low-latency network, the cloud gaming can provide more smoother experience.
+    </p>
+  </section>
+
+
+
         
     </section>
+
     <section>
       <h2>Gap Analysis</h2>
+
+      <section>
+        <h2>Common approaches for offloading <sup>NEW</sup></h2>
+        <p>
+          Currently, there are two common approaches for offloading. One is to send the codes in the request from the client to the edge server, the other is to fetch the codes from inner file repositories on edge and execute them. They all work fine, but both approaches have some downsides.
+  
+          <li>Sending codes from client to edge</li>
+  
+          <p>In this approach, the client sends the local codes to the edge and execute the codes on the edge side. The downside is obvious, since more data is transferred and it may cause network latency.Handling more data will also put more strain on the resource-restricted end device. Meanwhile, some codes are sensitive, data security is also an big issue.  </p>
+  
+          <li>Fetching codes from file repositories and executing on edge</li>
+          <figure>
+            <img alt="CloudApp" src="images/edge_fetching_codes.png" width="600">
+            <figcaption>
+              Fetching codes from inner file repositories
+            </figcaption>
+          </figure>
+  
+          <p>In this approach, The client leverages user-defined offloading library to send proper params to the offloading server and the server will fetch specified codes from inner repositories and then execute the codes.</p>
+  
+          <p>The downside of this approach is that additional file repositories are needed and the developers have to upload the codes to the repository and make sure the local and the edge side have the same version codes. </p>
+
+          <p>Meanwhile, since the offloading library plays an import role in offloading, developers should be reliable for  creating a robust offloading policy to discovery and connect with edge nodes, decide which parts of the codes can be offloaded and the time to offload. This will put more strain on the developer and affect the overall programming experience and the productivity.</p>
+          
+      </section>
+
+
+      <section>
+          <h2>Conclusion <sup>NEW</sup></h2>
+          <p>
+              The two approaches discussed above are mostly similar. The main difference is the way the codes are sent to the edge. However, except for those downsides mentioned, some common issues or pain points are still remained and needed to be addressed.
+
+              <ul>
+                <li>Discrepancies between client runtime and edge runtime may cause running failures, as well as the runtime differences between edge node and edge node.So an unified runtime is needed to take into consideration. WebAssembly runtime may be good choice.</li>
+                <li>Capabilities for discovering and connecting with edge nodes is needed. </li>
+                <li>Some parts of the program might be sensitive, and the developer might not want it to be sent over the internet.Capabilities for developers to configure which parts can be offloaded is needed.</li>
+                <li>When certain condition meets, for example, if there is no edge server in proximity to the user or the internet is lost, codes should be executed locally instead of offloaded. That's to say, the developer will know what might be offloaded to a server but does not need to decide or care about when it is offloaded. </li>
+                <li>Security and privacy are important, secure communication mechanisms are needed.</li>
+              </ul>
+          </p>
+      </section>
+
     </section>
+
+
     <section>
-      <h2>Requirements</h2>
+      <h2>Requirements <sup>UPDATED</sup></h2>
       <p>
         The requriments that was derived from the use cases are listed bellow.
       </p>
@@ -218,14 +406,74 @@
             </tr>
             
             <tr>
-              <td>R1: Client should be able to offload computing intensive work to the edge cloud. </td>
+              <td>R1: Client Offload.  Client should be able to offload computing intensive work to an edge resource.
+                </td>
               <td>Use case 2.1, 2.2, 2.3, 2.4, 2.5; </td> 
             </tr>
 
             <tr>
-              <td>R2: The edge cloud should be able to handover computing intensive work back to the client.</td>
+              <td>R2a: Application-Directed Migration.
+                  The application should be able to explictly manage migration of work between computing resources.
+                  This may include temporarily running a workload on multiple computing
+                  resources to hide transfer latency.
+              </td>
+              <td>Use case (refs TBD);</td>
+            </tr>
+            <tr>
+              <td>R2b: Live Migration.  The edge cloud should be able to transparently migrate live work between computing resources.
+                This includes between edge resources, cloud resources, and back to the client, as necessary.
+                If the workload is stateful, this includes state capture and transfer.</td>
               <td>Use case 2.1,2.2, 2.5;</td>
             </tr>
+
+            <tr>
+              <td>R3: Discovery.  A client should be able to dynamically enumerate available edge resources.</td>
+              <td>Use case (refs TBD);</td>
+            </tr>
+
+            <tr>
+              <td>R4: Selection.  A client should be able to select between available resources, including making
+                  a decision about whether offload is appropriate (e.g. running on the client may be the best choice).
+                  This selection may be automatic or application-directed, and may require metadata or measurements
+                  of the performance and latency of edge resources, and may be static or dynamic.
+                  To do: perhaps break variants down into separate sub-requirements.
+                </td>
+              <td>Use case (refs TBD);</td>
+            </tr>
+
+            <tr>
+              <td>R5: Packaging.  A workload should be packaged so it can be executed on available edge resources.
+                Note: this means either platform independence OR a means to negotiate which workloads can run where.</td>
+              <td>Use case (refs TBD);</td>
+            </tr>
+
+            <tr>
+              <td>R6: Persistence.  It should be possible for a workload to be run "in the background", possibly
+                event-driven, even if the client is not active.  This also implies lifetime management (cleaning
+                up workloads under some conditions, such as if the client has not connected for a certain amount
+                of time, etc.)</td>
+              <td>Use case (refs TBD);</td>
+            </tr>
+
+            <tr>
+              <td>R7: Security and Privacy.  The client should be able to control and protect the data used
+                by an offloaded workload.
+                Note: this may result in constraints upon the selection of offload targets, but
+                it also means data needs to be protected in transit, at rest, etc.</td>
+              <td>Use case (refs TBD);</td>
+            </tr>
+
+            <tr>
+              <td>R8: Resource Management.  The client should be able to control the use of resources by an
+                  offloaded workload on a per-application basis.
+                Note: If an edge resource has a usage charge, for example, a client may want to set
+                quotas on offload, and some applications may need more resources than others.
+                This may also require a negotiation, e.g. a workload may have minimum requirements,
+                making offload mandatory on limited clients.
+                </td>
+              <td>Use case (refs TBD);</td>
+            </tr>
+
           
           </tbody>
         </table>
@@ -234,7 +482,7 @@
     <section>
       <h2>Architecture Proposals</h2>
       <p>
-        This document proposes different architecures that address the needs identified above.</p>
+        This document proposes different architectures that address the needs identified above.</p>
 
       <section>
         <h3>Seamless code sharing across client/edge/cloud</h3>
@@ -243,7 +491,7 @@
       </p>
 
         <p>
-          The proposed high level architecure is shown in the following figure:
+          The proposed high level architectures is shown in the following figure:
         </p>
 
         <figure>
